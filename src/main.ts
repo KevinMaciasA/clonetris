@@ -11,9 +11,6 @@ game.render()
 
 const keydownHandler = (event: KeyboardEvent) => {
   const button = event.key
-  console.log(button)
-  if (button === "s") {
-    game.move(0, 1)
-  }
+  game.input(button)
 }
 document.addEventListener("keydown", keydownHandler)
