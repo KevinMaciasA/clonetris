@@ -1,7 +1,7 @@
 import Point from "../utils/Point";
 import Dominos from "./Dominos";
 
-class Square extends Dominos {
+class Oblock extends Dominos {
   constructor(x: number, y: number) {
     const shape = [
       new Point(0, 0), new Point(0, 1),
@@ -12,4 +12,4 @@ class Square extends Dominos {
 
 }
 
-export default Square
+export default Oblock

@@ -1,12 +1,12 @@
 import Dominos from "./Dominos/Dominos"
-import Square from "./Dominos/Square"
+import Oblock from "./Dominos/Oblock"
 
 class Game {
   private dominos: Dominos[]
   private moveSet: Map<string, () => void>
 
   constructor() {
-    this.dominos = [new Square(0, 0)]
+    this.dominos = [new Oblock(0, 0)]
     this.moveSet = new Map([
       ["w", this.moveTop.bind(this)],
       ["s", this.moveBot.bind(this)],
