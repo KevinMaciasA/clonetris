@@ -1,7 +1,7 @@
 import Point from "../utils/Point";
-import Dominos from "./Dominos";
+import Block from "./Block";
 
-class LBlock extends Dominos {
+class LBlock extends Block {
   constructor(x: number, y: number) {
     const shape = [
       /* ------ L shape space ----- */ new Point(2, 0),

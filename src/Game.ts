@@ -1,7 +1,7 @@
-import Dominos from "./Dominos/Dominos"
-import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock } from "./Dominos"
+import Block from "./Block/Block"
+import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock } from "./Block"
 class Game {
-  private dominos: Dominos[]
+  private dominos: Block[]
   private moveSet: Map<string, () => void>
 
   constructor() {

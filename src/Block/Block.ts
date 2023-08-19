@@ -1,7 +1,7 @@
 import Point from "../utils/Point";
 import { colorPoint, ColorName } from "../utils/colorPoint";
 
-abstract class Dominos {
+abstract class Block {
   position: Point
   protected shape: Point[]
   protected color: ColorName
@@ -41,4 +41,4 @@ abstract class Dominos {
   }
 }
 
-export default Dominos
+export default Block

@@ -1,7 +1,7 @@
 import Point from "../utils/Point";
-import Dominos from "./Dominos";
+import Block from "./Block";
 
-class ZBlock extends Dominos {
+class ZBlock extends Block {
   constructor(x: number, y: number) {
     const shape = [
       new Point(0, 0), new Point(1, 0),
