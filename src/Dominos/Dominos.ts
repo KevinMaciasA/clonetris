@@ -1,26 +1,28 @@
 import Point from "../utils/Point";
-import colorPoint from "../utils/colorPoint";
+import { colorPoint, ColorName } from "../utils/colorPoint";
 
 abstract class Dominos {
   position: Point
   protected shape: Point[]
+  protected color: ColorName
 
-  constructor(initPosition: Point, shape: Point[]) {
+  constructor(initPosition: Point, shape: Point[], color: ColorName = "Black") {
     this.position = initPosition
-    this.shape = shape;
+    this.shape = shape
+    this.color = color
   }
 
   draw() {
     this.shape.forEach((point) => {
       const p = this.position.add(point)
-      colorPoint("crimson", p)
+      colorPoint(this.color, p)
     })
   }
 
   clear() {
     this.shape.forEach((point) => {
       const p = this.position.add(point)
-      colorPoint("white", p)
+      colorPoint("White", p)
     })
   }
 

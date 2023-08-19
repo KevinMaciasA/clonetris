@@ -1,12 +1,20 @@
 import Point from "./Point"
 
-//TODO: Add all posible colors as enum
+export type ColorName = "RoyalBlue"
+  | "Crimson"
+  | "ForestGreen"
+  | "Goldenrod"
+  | "Teal"
+  | "SlateGray"
+  | "Indigo"
+  | "Chocolate"
+  | "Plum"
+  | "White"
+  | "Black";
 
-function colorPoint(color: string, point: Point) {
-  const p = document.getElementById(`${point.y}-${point.x}`)
+export function colorPoint(color: ColorName, point: Point) {
+  const p = document.getElementById(`${point.x}-${point.y}`)
   if (!p) return
 
   p.style.backgroundColor = color;
 }
-
-export default colorPoint

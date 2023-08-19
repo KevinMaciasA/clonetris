@@ -14,3 +14,8 @@ const keydownHandler = (event: KeyboardEvent) => {
   game.input(button)
 }
 document.addEventListener("keydown", keydownHandler)
+
+const intervalCallback = () => {
+  game.input("s")
+}
+setInterval(intervalCallback, 1000)
