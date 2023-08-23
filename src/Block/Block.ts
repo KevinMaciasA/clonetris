@@ -51,6 +51,12 @@ abstract class Block {
     const newPosition = this.point.add(new Point(x, y))
     return this.shape.map(point => newPosition.add(point))
   }
+
+  rotate() {
+    this.clear()
+    this.shape.forEach(point => point.rotate())
+    this.draw()
+  }
 }
 
 export default Block

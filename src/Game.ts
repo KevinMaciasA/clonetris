@@ -32,6 +32,7 @@ class Game {
       ["s", this.moveBot.bind(this)],
       ["a", this.moveLeft.bind(this)],
       ["d", this.moveRight.bind(this)],
+      ["r", this.rotate.bind(this)]
     ])
   }
 
@@ -101,6 +102,14 @@ class Game {
     const relX = 1
     const relY = 0
     if (!this.isOff(relX, relY)) this.moveCurrent(relX, relY)
+  }
+
+  private rotate() {
+    const last = this.stack.at(-1)
+
+    if (!last) return
+
+    last.rotate()
   }
 
   private isOff(x: number, y: number) {
