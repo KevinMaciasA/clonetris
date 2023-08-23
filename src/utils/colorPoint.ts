@@ -9,6 +9,7 @@ export type ColorName = "RoyalBlue"
   | "Indigo"
   | "Chocolate"
   | "Plum"
+  | "HotPink"
   | "White"
   | "Black";
 
