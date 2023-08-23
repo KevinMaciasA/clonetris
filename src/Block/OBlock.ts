@@ -10,6 +10,9 @@ class OBlock extends Block {
     super(new Point(x, y), shape, "Goldenrod")
   }
 
+  override rotate(): void {
+    //do nothing
+  }
 }
 
 export default OBlock
