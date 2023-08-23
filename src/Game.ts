@@ -121,7 +121,7 @@ class Game {
     const preview = last.previewMove(x, y)
     //prevent auto colision
     const points = preview.filter(pointA => !current.some(pointB => pointA.equal(pointB)))
-    const isOff = points.some(point => this.grid.isOffWidth(point.x))
+    const isOff = points.some(point => this.grid.xCollision(point.x, point.y))
     return isOff
   }
 

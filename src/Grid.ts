@@ -21,6 +21,17 @@ class Grid {
     return x < 0 || x >= this.columns
   }
 
+  //horizontal colition
+  xCollision(x: number, y: number) {
+    if (this.isOffWidth(x)) return true
+
+    const position = document.getElementById(`${x}-${y}`)
+
+    if (position?.dataset.isBlocked === "true") return true
+
+    return false
+  }
+
   isOffHeight(y: number) {
     return y < 0 || y >= this.rows
   }
