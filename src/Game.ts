@@ -84,7 +84,7 @@ class Game {
     //prevent auto colision
     const points = preview.filter(pointA => !current.some(pointB => pointA.equal(pointB)))
 
-    const isEnd = points.some(point => this.grid.isEnd(point.x, point.y))
+    const isEnd = points.some(point => this.grid.yCollision(point.x, point.y))
     if (!isEnd) return this.move(last, 0, 1)
 
     const next = this.blocksLeft.pop()

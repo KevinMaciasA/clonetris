@@ -36,7 +36,7 @@ class Grid {
     return y < 0 || y >= this.rows
   }
 
-  isEnd(x: number, y: number): boolean {
+  yCollision(x: number, y: number): boolean {
     if (y >= this.rows) return true
     const position = document.getElementById(`${x}-${y}`)
 
