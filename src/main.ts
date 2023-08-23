@@ -1,12 +1,18 @@
 import Game from './Game'
+import Grid from './Grid'
 import populateGrid from './populateGrid'
 import './style.css'
 
-const grid = document.getElementById("game-grid")
-if (!grid) throw new Error("Grid is missing")
-populateGrid(grid)
+const columns = 10
+const rows = 20
 
-const game = new Game()
+const htmlGrid = document.getElementById("game-grid")
+if (!htmlGrid) throw new Error("Grid is missing")
+populateGrid(htmlGrid, rows, columns)
+
+const grid = new Grid(rows, columns, htmlGrid)
+
+const game = new Game(grid)
 game.render()
 
 const keydownHandler = (event: KeyboardEvent) => {
