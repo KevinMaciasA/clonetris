@@ -1,6 +1,7 @@
 import Point from "./Point"
 
-export type ColorName = "RoyalBlue"
+export type ColorName = "Transparent"
+  | "RoyalBlue"
   | "Crimson"
   | "ForestGreen"
   | "Goldenrod"

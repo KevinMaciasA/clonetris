@@ -24,7 +24,7 @@ abstract class Block {
   clear() {
     this.shape.forEach((point) => {
       const p = this.point.add(point)
-      colorPoint("White", p)
+      colorPoint("Transparent", p)
       addCustomAttr("isBlocked", false, p)
     })
   }
