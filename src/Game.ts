@@ -75,10 +75,18 @@ class Game {
     last.move(x, y)
   }
 
+  // Hard Drop
   private moveTop() {
-    this.moveCurrent(0, -1)
+    let current = new Point(0, 1)
+    let past = new Point(0, 0)
+    while (!this.isEnd(current.x, current.y)) {
+      past = current
+      current = current.add(new Point(0, 1));
+    }
+    this.moveCurrent(0, past.y)
   }
 
+  // Soft Drop
   private moveBot() {
     const relX = 0
     const relY = 1
