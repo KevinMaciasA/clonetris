@@ -12,7 +12,15 @@ class Point {
   }
 
   equal(point: Point) {
-    return this.x === point.x && this.y === point.y
+    return this.equalX(point.x) && this.equalY(point.y)
+  }
+
+  private equalX(x: number) {
+    return this.x === x
+  }
+
+  equalY(y: number) {
+    return this.y === y
   }
 
   swap() {
