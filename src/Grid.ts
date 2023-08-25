@@ -63,6 +63,15 @@ class Grid {
 
     return false
   }
+
+  isRowCompleted(y: number) {
+    for (let x = 0; x < this.columns; x++) {
+      const position = document.getElementById(`${x}-${y}`)
+      if (!position?.dataset.isBlocked) return false
+    }
+
+    return true
+  }
 }
 
 export default Grid
