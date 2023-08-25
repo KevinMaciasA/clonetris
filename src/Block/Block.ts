@@ -29,18 +29,22 @@ abstract class Block {
     })
   }
 
+  doAndRedraw(callback: () => void) {
+    this.clear()
+    callback()
+    this.draw()
+  }
+
   //absolute movement
   absMove(position: Point) {
-    this.clear()
-    this.point = position
-    this.draw()
+    this.doAndRedraw(() => this.point = position)
   }
   // relative movement
   move(x: number, y: number) {
-    this.clear()
-    this.point.x += x
-    this.point.y += y
-    this.draw()
+    this.doAndRedraw(() => {
+      this.point.x += x
+      this.point.y += y
+    })
   }
 
   position(): Point[] {
@@ -53,9 +57,15 @@ abstract class Block {
   }
 
   rotate() {
-    this.clear()
-    this.shape.forEach(point => point.rotate())
-    this.draw()
+    this.doAndRedraw(() => this.shape.forEach(point => point.rotate()))
+  }
+
+  deleteFromShape(point: Point) {
+    this.doAndRedraw(() => this.shape = this.shape.filter(p => !p.equal(point)))
+  }
+
+  deleteAllYFromShape(y: number) {
+    this.doAndRedraw(() => this.shape = this.shape.filter(p => !p.equalY(y)))
   }
 }
 
