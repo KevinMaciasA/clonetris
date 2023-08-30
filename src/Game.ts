@@ -4,36 +4,39 @@ import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock } from "./Block"
 import { randomNumber } from "./utils/randomNumber"
 import Point from "./utils/Point"
 
-
-// TODO: technical debt: -optimize re-render & collisions
 class Game {
+  private index: number
   private stack: Block[]
   private blocksLeft: Block[]
-  private blocks: Array<() => Block>
+  private blocks: Array<(id: number) => Block>
   private moveSet: Map<string, () => void>
   private grid: Grid
 
   constructor(grid: Grid) {
     this.grid = grid
+    this.index = 0
     const half = Math.round(this.grid.columns / 4)
     this.blocks = [
-      () => new IBlock(half, 0),
-      () => new JBlock(half, 0),
-      () => new LBlock(half, 0),
-      () => new OBlock(half, 0),
-      () => new ZBlock(half, 0),
-      () => new TBlock(half, 0),
-      () => new SBlock(half, 0)
+      (id: number) => new IBlock(id, half, 0),
+      (id: number) => new JBlock(id, half, 0),
+      (id: number) => new LBlock(id, half, 0),
+      (id: number) => new OBlock(id, half, 0),
+      (id: number) => new ZBlock(id, half, 0),
+      (id: number) => new TBlock(id, half, 0),
+      (id: number) => new SBlock(id, half, 0)
     ]
     this.blocksLeft = this.newStack()
-    const firstBlock = this.blocksLeft.pop()
-    this.stack = [firstBlock ?? new LBlock(half, 0)]
+    const firstBlock = this.blocksLeft.shift()
+
+    if (!firstBlock) throw new Error("Problem generating new stack of Blocks")
+
+    this.stack = [firstBlock]
     this.moveSet = new Map([
       ["w", this.moveTop.bind(this)],
       ["s", this.moveBot.bind(this)],
       ["a", this.moveLeft.bind(this)],
       ["d", this.moveRight.bind(this)],
-      ["r", this.rotate.bind(this)]
+      ["r", this.rotateCurrent.bind(this)]
     ])
   }
 
@@ -47,9 +50,9 @@ class Game {
     }
     return newStack.map(index => {
       const dominoFactory = this.blocks.at(index)
-      if (dominoFactory) return dominoFactory()
+      if (dominoFactory) return dominoFactory(this.index++)
 
-      return new OBlock(0, 0)
+      return new OBlock(this.index++, 0, 0)
     })
   }
 
@@ -57,14 +60,14 @@ class Game {
     if (this.blocksLeft.length === 0) {
       this.blocksLeft = this.newStack()
     } else {
-      const next = this.blocksLeft.pop()
+      const next = this.blocksLeft.shift()
       if (next) this.stack.push(next)
     }
 
   }
 
-  private move(block: Block, x: number, y: number) {
-    block.move(x, y)
+  private move(block: Block, point: Point) {
+    block.absMove(point)
   }
 
   private moveCurrent(x: number, y: number) {
@@ -72,74 +75,130 @@ class Game {
 
     if (!last) return
 
-    last.move(x, y)
+    const moveInX = x !== 0
+    const moveInY = y !== 0
+
+    const preview = last.previewMove(x, y)
+
+    last.clear() //to prevente auto-collisions
+    if (moveInX) {
+      if (!this.isAnyOff(preview)) return last.move(x, y)
+
+      last.draw()
+    } else if (moveInY) {
+      if (!this.isAnyEnd(preview)) return last.move(x, y)
+
+      last.draw()
+      this.handleRowFull()
+      this.nextBlock()
+    }
+  }
+
+  private goTillEnd(block: Block) {
+    let current = block.point.add(new Point(0, 1))
+    let past = block.point
+    block.clear()
+    while (!this.isAnyEnd(block.previewAbsMove(current))) {
+      past = current
+      current = current.add(new Point(0, 1));
+    }
+    block.draw()
+    this.move(block, past)
   }
 
   // Hard Drop
   private moveTop() {
-    let current = new Point(0, 1)
-    let past = new Point(0, 0)
-    while (!this.isEnd(current.x, current.y)) {
-      past = current
-      current = current.add(new Point(0, 1));
-    }
-    this.moveCurrent(0, past.y)
+    const last = this.stack.at(-1)
+
+    if (!last) return
+
+    this.goTillEnd(last)
   }
 
   // Soft Drop
   private moveBot() {
     const relX = 0
     const relY = 1
-    if (!this.isEnd(relX, relY)) return this.moveCurrent(0, 1)
 
-    this.nextBlock()
+    this.moveCurrent(relX, relY)
   }
 
   private moveLeft() {
     const relX = -1
     const relY = 0
-    if (!this.isOff(relX, relY)) this.moveCurrent(relX, relY)
+
+    this.moveCurrent(relX, relY)
   }
 
   private moveRight() {
     const relX = 1
     const relY = 0
-    if (!this.isOff(relX, relY)) this.moveCurrent(relX, relY)
+
+    this.moveCurrent(relX, relY)
   }
 
-  private rotate() {
+  private rotateCurrent() {
     const last = this.stack.at(-1)
 
     if (!last) return
 
-    last.rotate()
+    this.rotate(last)
   }
 
-  private currentPreviewMove(x: number, y: number): Point[] {
+  private rotate(block: Block) {
+    block.rotate()
+  }
+
+  private isOff(point: Point): boolean {
+    return this.grid.xCollision(point.x, point.y)
+  }
+
+  private isAnyOff(points: Point[]): boolean {
+    return points.some(point => this.isOff(point))
+  }
+
+  private isEnd(point: Point) {
+    return this.grid.yCollision(point.x, point.y)
+  }
+
+  private isAnyEnd(points: Point[]) {
+    return points.some(point => this.isEnd(point))
+  }
+
+  private handleRowFull() {
     const last = this.stack.at(-1)
 
-    if (!last) throw new Error("Block stack is empty")
+    if (!last) return
 
-    const current = last.position();
-    const preview = last.previewMove(x, y)
+    const position = last.position()
 
-    //prevent auto colision
-    const points = preview.filter(pointA => !current.some(pointB => pointA.equal(pointB)))
-    return points
+    const rows = position
+      .map(point => point.y)
+      .reduce((uniques, row): number[] => !uniques.includes(row) ? [...uniques, row] : uniques, new Array<number>())
+
+    const rowsFull: number[] = rows.filter(row => this.grid.isRowFull(row))
+    if (rowsFull.length === 0) return
+
+    rowsFull.forEach(row => this.clearRow(row))
+
+    this.stack.forEach(block => this.goTillEnd(block))
   }
 
-  private isEnd(x: number, y: number) {
-    const newPosition = this.currentPreviewMove(x, y)
+  private clearRow(row: number) {
+    const dataIds = this.grid.getDataIdsIn(row)
+    dataIds.forEach(id => {
+      const block = this.stack.find(block => block._id === id)
 
-    const isEnd = newPosition.some(point => this.grid.yCollision(point.x, point.y))
-    return isEnd
+      if (!block) return
+
+      block.deleteAllYFromShape(row)
+      // this part is still not tested
+      if (!block.hasShape()) this.remove(block)
+    })
   }
 
-  private isOff(x: number, y: number) {
-    const newPosition = this.currentPreviewMove(x, y)
-
-    const isOff = newPosition.some(point => this.grid.xCollision(point.x, point.y))
-    return isOff
+  private remove(block: Block) {
+    this.stack = this.stack.filter(b => b !== block)
   }
 
   input(button: string) {
