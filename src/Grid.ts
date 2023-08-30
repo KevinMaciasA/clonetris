@@ -59,18 +59,31 @@ class Grid {
 
   isBlocked(x: number, y: number): boolean {
     const position = document.getElementById(`${x}-${y}`)
-    if (position?.dataset.isBlocked) return true
+    if (position?.dataset.isBlocked === "true") return true
 
     return false
   }
 
-  isRowCompleted(y: number) {
+  isRowFull(y: number) {
     for (let x = 0; x < this.columns; x++) {
       const position = document.getElementById(`${x}-${y}`)
-      if (!position?.dataset.isBlocked) return false
+      if (position?.dataset.isBlocked === "false") return false
     }
 
     return true
+  }
+
+  getDataIdsIn(y: number): Set<number> {
+    const set: Set<number> = new Set()
+    for (let x = 0; x < this.columns; x++) {
+      const position = document.getElementById(`${x}-${y}`)
+      const dataId = position?.dataset.id
+
+      if (!dataId || dataId === "null") continue
+
+      set.add(parseInt(dataId))
+    }
+    return set
   }
 }
 
