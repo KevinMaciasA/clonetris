@@ -1,13 +1,15 @@
-import Point from "../utils/Point";
 import Block from "./Block";
+import Point from "../utils/Point";
+import { ColorName } from "../utils/colorPoint";
 
 class TBlock extends Block {
-  constructor(x: number, y: number) {
+  constructor(id: number, x: number, y: number) {
     const shape = [
       /*T shape space*/ new Point(0, -1),
       new Point(-1, 0), new Point(0, 0), new Point(1, 0)
     ]
-    super(new Point(x, y), shape, "Indigo")
+    const color: ColorName = "Indigo"
+    super({ id, x, y, shape, color })
   }
 
 }
