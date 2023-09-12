@@ -7,7 +7,7 @@ class IBlock extends Block {
     const shape = [
       new Point(-2, 0), new Point(-1, 0), new Point(0, 0), new Point(1, 0)
     ]
-    const color: ColorName = "RoyalBlue"
+    const color: ColorName = "Blue"
     super({ id, x, y, shape, color })
   }
 

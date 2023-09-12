@@ -8,7 +8,7 @@ class LBlock extends Block {
       /* ------ L shape space ----- */ new Point(1, -1),
       new Point(-1, 0), new Point(0, 0), new Point(1, 0)
     ]
-    const color: ColorName = "ForestGreen"
+    const color: ColorName = "Turquoise"
     super({ id, x, y, shape, color })
   }
 

@@ -8,7 +8,7 @@ class TBlock extends Block {
       /*T shape space*/ new Point(0, -1),
       new Point(-1, 0), new Point(0, 0), new Point(1, 0)
     ]
-    const color: ColorName = "Indigo"
+    const color: ColorName = "Crimson"
     super({ id, x, y, shape, color })
   }
 

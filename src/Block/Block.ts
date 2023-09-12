@@ -40,7 +40,7 @@ abstract class Block {
   clear() {
     this.shape.forEach((point) => {
       const p = this.point.add(point)
-      colorPoint("Transparent", p)
+      colorPoint("Default", p)
       addCustomAttr("id", null, p)
       addCustomAttr("isBlocked", false, p)
     })

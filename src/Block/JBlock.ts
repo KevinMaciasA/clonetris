@@ -8,7 +8,7 @@ class JBlock extends Block {
       new Point(-1, -1),
       new Point(-1, 0), new Point(0, 0), new Point(1, 0)
     ]
-    const color: ColorName = "Crimson"
+    const color: ColorName = "Violet"
     super({ id, x, y, shape, color })
   }
 

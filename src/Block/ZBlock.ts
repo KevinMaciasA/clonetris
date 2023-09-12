@@ -8,7 +8,7 @@ class ZBlock extends Block {
       new Point(-1, -1), new Point(0, -1),
       /* z shape space */ new Point(0, 0), new Point(1, 0)
     ]
-    const color: ColorName = "HotPink"
+    const color: ColorName = "Yellow"
     super({ id, x, y, shape, color })
   }
 
