@@ -100,14 +100,14 @@ header {
 }
 
 h1 {
-  opacity: 40%;
-
   font-size: var(--h1);
   color: transparent;
   text-align: center;
   letter-spacing: 0.48rem;
 
   -webkit-text-stroke: 2px var(--Green-neon-color);
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
 main {
@@ -379,4 +379,21 @@ a:focus-visible {
 
 .hidden {
   display: none;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 40%;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 40%;
+  }
 }
