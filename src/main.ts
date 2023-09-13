@@ -2,6 +2,7 @@ import Game from './Game'
 import Grid from './Grid'
 import populateGrid from './populateGrid'
 import './style.css'
+import Interval from './utils/Interval'
 import { hideComponent } from './utils/hideComponent'
 
 const columns = 10
@@ -24,16 +25,22 @@ const startGame = () => {
   const game = new Game(grid)
   game.render()
 
-  const keydownHandler = (event: KeyboardEvent) => {
-    const button = event.key
-    game.input(button)
-  }
-  document.addEventListener("keydown", keydownHandler)
-
   const intervalCallback = () => {
     game.input("s")
   }
-  setInterval(intervalCallback, 1000)
+
+  const interval = new Interval(intervalCallback, 1000)
+
+  const keydownHandler = (event: KeyboardEvent) => {
+    const button = event.key
+    game.input(button)
+
+    if (button === "s")
+      interval.reset()
+    else if (button === "w")
+      interval.pulse(500)
+  }
+  document.addEventListener("keydown", keydownHandler)
 
   hideComponent(playButton)
   isRunning = true
@@ -44,4 +51,4 @@ document.addEventListener('keydown', (event) => {
   const button = event.key.toLowerCase()
 
   if (button === 'v') startGame()
-}) 
+})
