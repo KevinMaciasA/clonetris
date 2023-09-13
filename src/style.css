@@ -59,6 +59,28 @@
   padding: 0;
 }
 
+/* @reset button styles */
+button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+}
+
 html {
   font-size: 10px;
 }
@@ -138,6 +160,8 @@ section.about {
 }
 
 section.game {
+  position: relative;
+
   height: 100%;
   width: 100%;
 
@@ -151,6 +175,30 @@ section.game {
     width: auto;
     border: 2px solid transparent;
     border-image: var(--Tube-gradient) 18%;
+  }
+
+  & #play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 8px 22px;
+
+    font-size: var(--text);
+    text-align: center;
+    background-color: var(--Block-color);
+    color: var(--White);
+    border: 1px solid var(--White);
+
+    z-index: 1;
+
+    &:hover,
+    &:active {
+      background-color: var(--White);
+      color: var(--Block-color);
+      border-color: var(--Orange-neon-color);
+    }
   }
 
   & #game-grid {
@@ -271,21 +319,6 @@ section.instructions {
   }
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
-}
-
 footer {
   width: 100%;
   height: auto;
@@ -342,4 +375,8 @@ a:hover {
 a:focus,
 a:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.hidden {
+  display: none;
 }
