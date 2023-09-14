@@ -1,9 +1,7 @@
+import Button from './Button'
 import Game from './Game'
 import Grid from './Grid'
-import populateGrid from './populateGrid'
 import './style.css'
-import Interval from './utils/Interval'
-import { hideComponent } from './utils/hideComponent'
 
 const columns = 10
 const rows = 20
@@ -11,44 +9,26 @@ const rows = 20
 const htmlGrid = document.getElementById("game-grid")
 if (!htmlGrid) throw new Error("Grid is missing")
 
-populateGrid(htmlGrid, rows, columns)
-
 const grid = new Grid(rows, columns, htmlGrid)
 
-const playButton = document.getElementById("play-button")
-if (!playButton) throw new Error("Play button is missing")
+const controlButton = document.getElementById("play-button")
+if (!controlButton) throw new Error("Play button is missing")
 
-let isRunning = false
-const startGame = () => {
-  if (isRunning) return
+const game = new Game(grid, new Button(controlButton))
 
-  const game = new Game(grid)
-  game.render()
-
-  const intervalCallback = () => {
-    game.input("s")
-  }
-
-  const interval = new Interval(intervalCallback, 1000)
-
-  const keydownHandler = (event: KeyboardEvent) => {
-    const button = event.key
-    game.input(button)
-
-    if (button === "s")
-      interval.reset()
-    else if (button === "w")
-      interval.pulse(500)
-  }
-  document.addEventListener("keydown", keydownHandler)
-
-  hideComponent(playButton)
-  isRunning = true
+const keydownHandler = (event: KeyboardEvent) => {
+  const button = event.key
+  game.input(button)
 }
 
-playButton.addEventListener('click', startGame)
-document.addEventListener('keydown', (event) => {
-  const button = event.key.toLowerCase()
+document.addEventListener("keydown", keydownHandler)
 
-  if (button === 'v') startGame()
+const clickHandler = () => {
+  game.start()
+}
+
+controlButton.addEventListener('click', clickHandler)
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) game.stop()
 })

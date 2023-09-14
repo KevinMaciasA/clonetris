@@ -3,6 +3,8 @@ import Grid from "./Grid"
 import { IBlock, JBlock, LBlock, OBlock, SBlock, TBlock, ZBlock } from "./Block"
 import { randomNumber } from "./utils/randomNumber"
 import Point from "./utils/Point"
+import Clock from "./utils/Clock"
+import Button from "./Button"
 
 class Game {
   private index: number
@@ -11,9 +13,14 @@ class Game {
   private blocks: Array<(id: number) => Block>
   private moveSet: Map<string, () => void>
   private grid: Grid
+  private clock: Clock;
+  private controlButton: Button
+  private isRunning: boolean;
 
-  constructor(grid: Grid) {
+  constructor(grid: Grid, controlButton: Button) {
+    this.controlButton = controlButton
     this.grid = grid
+    this.isRunning = false
     this.index = 0
     const half = Math.round(this.grid.columns / 4)
     this.blocks = [
@@ -31,12 +38,17 @@ class Game {
     if (!firstBlock) throw new Error("Problem generating new stack of Blocks")
 
     this.stack = [firstBlock]
+
+    // set auto drop
+    const miliSeconds = 1000
+    this.clock = new Clock(this.moveBot.bind(this), miliSeconds)
+
     this.moveSet = new Map([
       ["w", this.moveTop.bind(this)],
       ["s", this.moveBot.bind(this)],
       ["a", this.moveLeft.bind(this)],
       ["d", this.moveRight.bind(this)],
-      ["r", this.rotateCurrent.bind(this)]
+      ["r", this.rotateCurrent.bind(this)],
     ])
   }
 
@@ -113,6 +125,7 @@ class Game {
     if (!last) return
 
     this.goTillEnd(last)
+    this.clock.pulse(500)
   }
 
   // Soft Drop
@@ -121,6 +134,7 @@ class Game {
     const relY = 1
 
     this.moveCurrent(relX, relY)
+    this.clock.reset() // reset auto drop
   }
 
   private moveLeft() {
@@ -202,12 +216,49 @@ class Game {
   }
 
   input(button: string) {
-    const fun = this.moveSet.get(button)
-    if (fun) fun()
+    if (this.isRunning) {
+      const fun = this.moveSet.get(button)
+      if (fun) fun()
+    } else {
+      if (button === "v") this.start()
+    }
   }
 
-  render() {
+  start() {
+    this.render()
+    this.clock.start()
+    this.controlButton.hide()
+    this.isRunning = true
+  }
+
+  stop() {
+    this.clock.stop()
+    this.controlButton.show()
+    this.isRunning = false
+  }
+
+  reset() {
+    this.stop()
+    this.clear()
+
+    this.blocksLeft = this.newStack()
+    const firstBlock = this.blocksLeft.shift()
+
+    if (!firstBlock) throw new Error("Problem generating new stack of Blocks")
+
+    this.stack = [firstBlock]
+
+    // set auto drop
+    const miliSeconds = 1000
+    this.clock = new Clock(this.moveBot.bind(this), miliSeconds)
+  }
+
+  private render() {
     this.stack.forEach(domino => domino.draw())
+  }
+
+  private clear() {
+    this.stack.forEach(domino => domino.clear())
   }
 }
 
