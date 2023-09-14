@@ -1,12 +1,25 @@
 class Grid {
   readonly rows: number
   readonly columns: number
-  private htmlGrid: HTMLElement | null
+  private htmlGrid: HTMLElement
 
-  constructor(rows: number, columns: number, grid?: HTMLElement) {
+  constructor(rows: number, columns: number, grid: HTMLElement) {
     this.rows = rows
     this.columns = columns
-    this.htmlGrid = grid ?? null
+    this.htmlGrid = grid
+    this.populate()
+  }
+
+  private populate() {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        const div = document.createElement("div")
+        div.classList.add("grid-item")
+        div.dataset.isBlocked = "false"
+        div.id = `${j}-${i}`
+        this.htmlGrid.appendChild(div)
+      }
+    }
   }
 
   getGrid() {
