@@ -15,22 +15,22 @@ class Game {
   private grid: Grid
   private clock: Clock;
   private controlButton: Button
-  private isRunning: boolean;
+  private state: "running" | "stop" | "over";
 
   constructor(grid: Grid, controlButton: Button) {
     this.controlButton = controlButton
     this.grid = grid
-    this.isRunning = false
+    this.state = "stop"
     this.index = 0
-    const half = Math.round(this.grid.columns / 4)
+    const half = Math.round(this.grid.columns / 2) - 1
     this.blocks = [
-      (id: number) => new IBlock(id, half, 0),
-      (id: number) => new JBlock(id, half, 0),
-      (id: number) => new LBlock(id, half, 0),
-      (id: number) => new OBlock(id, half, 0),
-      (id: number) => new ZBlock(id, half, 0),
-      (id: number) => new TBlock(id, half, 0),
-      (id: number) => new SBlock(id, half, 0)
+      (id: number) => new IBlock(id, half, -1),
+      (id: number) => new JBlock(id, half, -1),
+      (id: number) => new LBlock(id, half, -1),
+      (id: number) => new OBlock(id, half, -1),
+      (id: number) => new ZBlock(id, half, -1),
+      (id: number) => new TBlock(id, half, -1),
+      (id: number) => new SBlock(id, half, -1)
     ]
     this.blocksLeft = this.newStack()
     const firstBlock = this.blocksLeft.shift()
@@ -40,7 +40,7 @@ class Game {
     this.stack = [firstBlock]
 
     // set auto drop
-    const miliSeconds = 1000
+    const miliSeconds = 900
     this.clock = new Clock(this.moveBot.bind(this), miliSeconds)
 
     this.moveSet = new Map([
@@ -102,7 +102,11 @@ class Game {
 
       last.draw()
       this.handleRowFull()
-      this.nextBlock()
+
+      if (!this.isGameOver(preview)) return this.nextBlock()
+
+      this.stop()
+      this.state = "over"
     }
   }
 
@@ -179,6 +183,10 @@ class Game {
     return points.some(point => this.isEnd(point))
   }
 
+  private isGameOver(points: Point[]) {
+    return points.some(points => points.y <= 0)
+  }
+
   private handleRowFull() {
     const last = this.stack.at(-1)
 
@@ -216,25 +224,34 @@ class Game {
   }
 
   input(button: string) {
-    if (this.isRunning) {
-      const fun = this.moveSet.get(button)
+    const lowerButton = button.toLowerCase()
+
+    if (this.state === "running") {
+      const fun = this.moveSet.get(lowerButton)
       if (fun) fun()
     } else {
-      if (button === "v") this.start()
+      if (lowerButton === "v") this.run()
     }
+  }
+
+  run() {
+    if (this.state === "stop") this.start()
+    else if (this.state === "over") this.reset()
   }
 
   start() {
     this.render()
     this.clock.start()
     this.controlButton.hide()
-    this.isRunning = true
+    this.state = "running"
   }
 
   stop() {
+    if (this.state !== "running") return
+
     this.clock.stop()
     this.controlButton.show()
-    this.isRunning = false
+    this.state = "stop"
   }
 
   reset() {
@@ -248,9 +265,9 @@ class Game {
 
     this.stack = [firstBlock]
 
-    // set auto drop
-    const miliSeconds = 1000
-    this.clock = new Clock(this.moveBot.bind(this), miliSeconds)
+    this.clock.reset()
+
+    this.start()
   }
 
   private render() {

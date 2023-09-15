@@ -16,15 +16,32 @@ if (!controlButton) throw new Error("Play button is missing")
 
 const game = new Game(grid, new Button(controlButton))
 
+let timeoutId: number;
 const keydownHandler = (event: KeyboardEvent) => {
   const button = event.key
+
+  if (button.toLocaleLowerCase() === "v")
+    timeoutId = window.setTimeout(() => {
+      game.reset()
+    }, 2000)
+
   game.input(button)
 }
 
 document.addEventListener("keydown", keydownHandler)
 
+const keyupHandler = (event: KeyboardEvent) => {
+  const button = event.key
+
+  if (button.toLocaleLowerCase() !== "v" || timeoutId === undefined) return
+
+  clearTimeout(timeoutId)
+}
+
+document.addEventListener("keyup", keyupHandler)
+
 const clickHandler = () => {
-  game.start()
+  game.run()
 }
 
 controlButton.addEventListener('click', clickHandler)
@@ -32,3 +49,4 @@ controlButton.addEventListener('click', clickHandler)
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) game.stop()
 })
+
