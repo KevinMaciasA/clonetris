@@ -11,10 +11,6 @@ Play it live: [Tetris Clone Demo](https://clonetris.vercel.app/)
 - [About](#about)
 - [Demo](#demo)
 - [How to Play](#how-to-play)
-- [Installation](#installation)
-- [Development](#development)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## About
 
@@ -24,7 +20,7 @@ This project is a recreation of the popular game Tetris. It was built using mode
 
 You can play the game live [here](https://clonetris.vercel.app/).
 
-![Tetris Clone Demo](insert demo screenshot or GIF here)
+![Tetris Clone Demo](https://i.imgur.com/17soOnZ.png)
 
 ## How to Play
 
