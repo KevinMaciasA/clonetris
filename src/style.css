@@ -397,3 +397,72 @@ a:focus-visible {
     opacity: 40%;
   }
 }
+
+#mobile {
+  display: none;
+  text-align: center;
+
+  padding: 8px 12px;
+  border: 1px solid var(--Yellow-color);
+
+  & span {
+    color: var(--Yellow-color);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  :root {
+    --h1: 4.8rem;
+    --h2: 4.2rem;
+    --text: 2rem;
+  }
+
+  #mobile {
+    display: block;
+    align-self: center;
+
+    font-size: 1.8rem;
+  }
+
+  main {
+    grid-template-columns: 1fr;
+  }
+
+  section.game,
+  section.instructions {
+    display: none;
+  }
+
+  footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+
+    & .acknowledgments {
+      display: none;
+    }
+
+    & .socials {
+      grid-column: 1;
+
+      justify-self: center;
+    }
+  }
+
+  @-webkit-keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 55%;
+    }
+  }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 55%;
+    }
+  }
+}
