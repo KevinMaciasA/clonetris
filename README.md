@@ -1,6 +1,6 @@
 # Tetris Clone
 
-![Tetris Clone](https://i.imgur.com/17soOnZ.png)
+![Tetris Clone](https://i.imgur.com/ER0VH2P.png)
 
 A classic Tetris game implemented from scratch using TypeScript, HTML, and CSS.
 
@@ -20,7 +20,7 @@ This project is a recreation of the popular game Tetris. It was built using mode
 
 You can play the game live [here](https://clonetris.vercel.app/).
 
-![Tetris Clone Demo](https://i.imgur.com/17soOnZ.png)
+![Tetris Clone Demo](https://i.imgur.com/ER0VH2P.png)
 
 ## How to Play
 
