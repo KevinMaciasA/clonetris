@@ -49,6 +49,9 @@
   --grid-width: calc(
     var(--square-length) + var(--grid-gap) - 2 * var(--grid-columns)
   );
+
+  /* other variables */
+  --opacity: 40%;
 }
 
 *,
@@ -386,7 +389,7 @@ a:focus-visible {
     opacity: 0;
   }
   100% {
-    opacity: 40%;
+    opacity: var(--opacity);
   }
 }
 @keyframes fade-in {
@@ -394,7 +397,7 @@ a:focus-visible {
     opacity: 0;
   }
   100% {
-    opacity: 40%;
+    opacity: var(--opacity);
   }
 }
 
@@ -415,6 +418,7 @@ a:focus-visible {
     --h1: 4.8rem;
     --h2: 4.2rem;
     --text: 2rem;
+    --opacity: 55%;
   }
 
   #mobile {
@@ -454,7 +458,7 @@ a:focus-visible {
       opacity: 0;
     }
     100% {
-      opacity: 55%;
+      opacity: var(--opacity);
     }
   }
   @keyframes fade-in {
@@ -462,7 +466,7 @@ a:focus-visible {
       opacity: 0;
     }
     100% {
-      opacity: 55%;
+      opacity: var(--opacity);
     }
   }
 }
